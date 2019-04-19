@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue 示例</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="name" placeholder="你的名字">
+        <h1>你好：{{name}}</h1>
+        <div>{{date}}</div>
+        <div>{{link}}</div>
+        <div v-html="link"></div>
+        <div v-pre>{{跳出编译部分}}</div>
+        <div>{{number/10}}</div>
+        <div>{{isOK ? '确定' : '取消'}}</div>
+        <div>{{text.split(',').reverse().join(',')}}</div>
+        <div>{{ date | formatDate}}</div>
+        <div v-if="show">显示这段文本</div>
+        <div>
+            <button @click="handleClose">点击隐藏1</button>
+            <button @click="show = !show">点击隐藏2</button>
+        </div>
+        <div>
+            <a :href="url">链接</a>
+            <img :src="imgUrl" alt="假装这里有图片">
+        </div>
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        const padDate = value => (value + "").padStart(2, '00')
+
+        const app = new Vue({
+            el: '#app',
+            data: {
+                name: '',
+                a: 2,
+                date: new Date(),
+                link: `<a href="#">这是一个链接</a>`,
+                number: 100,
+                isOK: false,
+                text: '123,456',
+                show: true,
+                url: 'http://www.baidu.com',
+                imgUrl: "https://www.github.com"
+            },
+            created() {
+                console.log(this.a)
+            },
+            mounted() {
+                console.log(this.$el)
+                this.timer = setInterval(() => {
+                    this.date = new Date()
+                }, 1000)
+            },
+            beforeDestroy() {
+                if (this.timer) {
+                    clearInterval(this.timer)
+                }
+            },
+            filters: {
+                formatDate(value) {
+                    let year = value.getFullYear();
+                    let month = padDate(value.getMonth() + 1)
+                    let day = padDate(value.getDate())
+                    let hours = padDate(value.getHours())
+                    let minutes = padDate(value.getHours())
+                    let seconds = padDate(value.getSeconds())
+                    return `${year} - ${month} - ${day} ${hours}:${minutes}:${seconds}`
+                }
+            },
+            methods: {
+                handleClose() {
+                    this.close()
+                },
+                close() {
+                    this.show = false
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
