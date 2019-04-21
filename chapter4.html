@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-bind class style 绑定</title>
+</head>
+
+<body>
+    <div id="app">
+        <div :class="{'active':isActive}">1</div>
+        <div class="static" :class="{'active':isActive,'error':isError}">2</div>
+        <div :class="classes">3</div>
+        <div :class="[activeCls,errorCls]">4</div>
+        <div :class="[isActive ? activeCls : '' , errorCls]">5</div>
+        <div :class="[{'active':isActive},errorCls]">6</div>
+        <div :class="classes2">7</div>
+        <my-component :class="{'active':isActive}"></my-component>
+        <div :style="{'color':color,'fontSize':fontSize+'px'}">9</div>
+        <div :style="styles">10</div>
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('my-component', {
+            template: `<p class="article">一些文本</p>`
+        })
+        const app = new Vue({
+            el: '#app',
+            data: {
+                isActive: true,
+                isError: false,
+                activeCls: 'active',
+                errorCls: 'error',
+                size: 'large',
+                disabled: true,
+                color:'red',
+                fontSize:14,
+                styles:{
+                    color:'blue',
+                    fontSize:14 + "px"
+                }
+            },
+            computed: {
+                classes() {
+                    return {
+                        active: this.isActive && !this.error,
+                        'text-fail': this.error && this.error.type === 'fail'
+                    }
+                },
+                classes2() {
+                    return [
+                        'btn',
+                        {
+                            ['btn-' + this.size]: this.size !== '',
+                            ['btn-disabled']: this.disabled
+                        }
+                    ]
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

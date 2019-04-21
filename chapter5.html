@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>内置指令</title>
+</head>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+<body>
+    <div id="app" v-cloak>
+        <div>{{message}}</div>
+        <p v-if="state === 1">当statue为1时显示该行</p>
+        <p v-else-if="state === 2">当statue为2时显示该行</p>
+        <p v-else>否则显示该行</p>
+
+
+        <template v-if="type === 'name'">
+            <label>用户名：</label>
+            <input placeholder="输入用户名" key="name-input">
+        </template>
+
+        <template v-else>
+            <label>邮箱：</label>
+            <input placeholder="输入邮箱" key="mail-input">
+        </template>
+
+        <button @click="handleToggleClick">切换输入类型</button>
+        <p v-show="status===1">当statue为1时显示该行</p>
+        <ul>
+            <li v-for="(book, index) in books" :key="index">{{index}} - {{book.name}}</li>
+        </ul>
+
+        <template v-for="(book,index) in books2">
+            <li>书名：{{book.name}}</li>
+            <li>作者：{{book.author}}</li>
+        </template>
+        <div>
+            <span v-for="(item,key,index) in user">{{index}}:{{key}}:{{item}}/</span>
+        </div>
+        <div>
+            <span v-for="n in 10">{{n}} </span>
+        </div>
+        <div>
+            可观察数组变化：
+            - push
+            - pop
+            - shift
+            - unshift
+            - splice
+            - sort
+            - reverse
+        </div>
+        <ul>
+            <li v-for="(book, index) in filterBooks" :key="index">{{book.name}}</li>
+        </ul>
+        <div>
+            <p>点击次数：{{counter}}</p>
+            <button @click="counter++"> + 1</button>
+            <button @click="handleAdd(10)">+10</button>
+        </div>
+        <div>
+            <a href="http://www.baidu.com" @click="handleClick('禁止打开',$event)">www.baidu.com</a>
+        </div>
+        <div>
+            事件修饰符
+            - stop
+            - prevent
+            - capture
+            - self
+            - once
+        </div>
+    </div>
+
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                message: '这是一段文本',
+                state: 1,
+                type: 'name',
+                status: 2,
+                books: [
+                    {
+                        name: 'aaaa'
+                    },
+                    {
+                        name: 'bbbbc'
+                    },
+                    {
+                        name: 'cccc'
+                    }
+                ],
+                books2: [
+                    {
+                        name: 'zzzz',
+                        author: 'z1z11zz'
+                    },
+                    {
+                        name: 'yyyyyyy',
+                        author: 'y11y1yy1yy1'
+                    },
+                    {
+                        name: 'xxxxxxx',
+                        author: 'xxxxx111'
+                    }
+                ],
+                user: {
+                    name: 'Aresn',
+                    gender: '男',
+                    age: 26
+                },
+                counter: 0
+            },
+            methods: {
+                handleToggleClick() {
+                    this.type = this.type === "name" ? 'mail' : 'name';
+                },
+                handleAdd(count = 1) {
+                    this.counter += count
+                },
+                handleClick(message,event){
+                    event.preventDefault();
+                    console.log(message);
+                }
+            },
+            computed: {
+                filterBooks() {
+                    return this.books.filter(book => book.name.match(/c$/))
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
