@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>slot分发</title>
+</head>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+<body>
+    <div id="app" v-cloak>
+        <child-component>
+            <p>分发内容</p>
+            <p>更多分发内容</p>
+        </child-component>
+        <child-component2>
+            <h2 slot="header">标题</h2>
+            <div slot="footer">底部信息</div>
+            <p>正文内容</p>
+            <p>更多正文内容</p>
+        </child-component2>
+        <child-component3>
+            <template v-slot="props">
+                <p>来自父组件的内容</p>
+                <p>{{props.msg}}</p>
+            </template>
+        </child-component3>
+        <my-list :books="books">
+            <template v-slot="slotProps">
+                <li>
+                    {{slotProps.bookName}}
+                </li>
+            </template>
+        </my-list>
+    </div>
+
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('child-component', {
+            template: `
+                <div>
+                    <slot>
+                        <p>如果父组件没有插入内容，我将作为默认出现</p>
+                    </slot>
+                </div>
+            `
+        })
+
+        Vue.component('child-component2', {
+            template: `
+                <div class="container">
+                    <div class="header">
+                        <slot name="header"></slot>
+                    </div>
+                    <div class="main">
+                        <slot></slot>
+                    </div>
+                    <div class="footer">
+                        <slot name="footer"></slot>
+                    </div>
+                </div>
+            `
+        })
+        
+        Vue.component('child-component3',{
+            template:`
+                <div class="container">
+                    <slot msg="来自子组件的内容"></slot>
+                </div>
+            `
+        })
+
+        Vue.component('my-list',{
+            props:{
+                books:{
+                    type:Array,
+                    default(){
+                        return []
+                    }
+                }
+            },
+            template:`
+                <ul>
+                    <slot
+                        v-for="book in books"
+                        :book-name="book.name"></slot>
+                </ul>
+            `
+        })
+        const app = new Vue({
+            el: '#app',
+            data:{
+                books:[
+                    {
+                        name:'aaaa'
+                    },
+                    {
+                        name:'bbbbb'
+                    },
+                    {
+                        name:'cccc'
+                    }
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>
