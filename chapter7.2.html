@@ -18,11 +18,27 @@
             <p>总数：{{total2}}</p>
             <my-component2 v-model="total2"></my-component2>
         </div>
+        <div>
+            <p>总数：{{total3}}</p>
+            <my-component3 v-model="total3"></my-component3>
+            <button @click="handleReduce2">-1</button>
+        </div>
+        <div>
+            <p>{{message}}</p>
+            <component-a></component-a>
+        </div>
+        <div>
+            <button @click="handleRef">通过ref获取子组件实例</button>
+            <component-b ref="comA"></component-b>
+            <p ref=p>内容</p>
+        </div>
     </div>
 
 
     <script src="./node_modules/vue/dist/vue.js"></script>
     <script>
+        const bus = new Vue();
+
         Vue.component('my-component', {
             template: `
                 <div>
@@ -61,16 +77,60 @@
                 }
             }
         })
+
+        Vue.component('my-component3', {
+            props: ['value'],
+            template: `<input :value="value" @input="updateValue">`,
+            methods: {
+                updateValue(event) {
+                    this.$emit('input', event.target.value)
+                }
+            }
+        })
+
+        Vue.component('component-a', {
+            template: `<button @click="handleEvent">传递事件</button>`,
+            methods: {
+                handleEvent() {
+                    bus.$emit('on-message', '来自组件component-a的内容')
+                }
+            }
+        })
+
+        Vue.component('component-b',{
+            template:`<div>子组件</div>`,
+            data(){
+                return {
+                    message:'子组件内容'
+                }
+            }
+        })
         const app = new Vue({
             el: '#app',
             data: {
                 total: 0,
-                total2: 0
+                total2: 0,
+                total3: 0,
+                message: ''
             },
             methods: {
                 handleTotal(total) {
                     this.total = total
+                },
+                handleReduce2() {
+                    this.total3--;
+                },
+                handleRef(){
+                    let msg = this.$refs.comA.message;
+                    console.log(msg)
+                    let msg2 = this.$refs.p
+                    console.log(msg2)
                 }
+            },
+            mounted() {
+                bus.$on('on-message', meg => {
+                    this.message = meg
+                })
             }
         })
     </script>
