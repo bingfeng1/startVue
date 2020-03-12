@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简单引入的练习</title>
+</head>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .main {
+        height: 90vh;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+
+    .container {
+        padding: 4rem 10rem;
+        border: 1px solid black;
+    }
+
+    .btnGroup {
+        position: absolute;
+        bottom: 5vh;
+    }
+</style>
+
+<body>
+    <div id="app" v-cloak>
+        <ask-area this-page="1">
+            <div slot="formData">
+                <div>1.请问您的性别是：</div>
+                <div>
+                    <input type="radio" name="sex" value="1">男
+                    <input type="radio" name="sex" value="2">女
+                    <input type="radio" name="sex" value="3">保密
+                </div>
+            </div>
+            <div slot="btn">
+                <button>下一步</button>
+                <button>重置</button>
+            </div>
+        </ask-area>
+        <ask-area this-page="2">
+            <div slot="formData">
+                <div>1.请问您的性别是：</div>
+                <div>
+                    <input type="radio" name="sex" value="1">男
+                    <input type="radio" name="sex" value="2">女
+                    <input type="radio" name="sex" value="3">保密
+                </div>
+            </div>
+            <div slot="btn">
+                <button>下一步</button>
+                <button>上一步</button>
+                <button>重置</button>
+            </div>
+        </ask-area>
+        <ask-area this-page="3">
+            <div slot="formData">
+                <div>1.请问您的性别是：</div>
+                <div>
+                    <input type="radio" name="sex" value="1">男
+                    <input type="radio" name="sex" value="2">女
+                    <input type="radio" name="sex" value="3">保密
+                </div>
+            </div>
+            <div slot="btn">
+                <button>提交</button>
+                <button>上一步</button>
+                <button>重置</button>
+            </div>
+        </ask-area>
+    </div>
+
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        //每页的总框架
+        Vue.component('ask-area', {
+            template: `
+                <div class="main">
+                    <div class="container">
+                        <slot name="formData"></slot>
+                    </div>
+                    <div class="btnGroup">
+                        <slot name="btn"></slot>
+                    </div>
+                </div>
+            `,
+            data() {
+                return {
+                    
+                }
+            },
+            props: {
+                thisPage: String
+            },
+        })
+
+        const app = new Vue({
+            el: '#app',
+            data: {
+                // 显示第几页内容
+                page: 1,
+            },
+            methods:{
+                
+            }
+        })
+    </script>
+</body>
+
+</html>
